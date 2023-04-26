@@ -51,101 +51,107 @@ class _MainPageState extends State<MainPage> {
         onRefresh: () async {
           await loadData();
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: phonebook.isEmpty
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.builder(
-                        itemCount: phonebook.length,
-                        itemBuilder: (context, index) {
-                          var phoneList = phonebook[index];
-                          return Dismissible(
-                            key: UniqueKey(),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 140,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => EditPage(
-                                                  id: phoneList.id,
-                                                  name: phoneList.name,
-                                                  phoneNumber:
-                                                      phoneList.phoneNumber,
-                                                  email: phoneList.email,
-                                                )));
-                                  },
-
-                                  // onTap: () async {
-                                  //   String refresh = await Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) => EditPage(
-                                  //                 id: phoneList.id,
-                                  //                 name: phoneList.name,
-                                  //                 phoneNumber:
-                                  //                     phoneList.phoneNumber,
-                                  //                 email: phoneList.email,
-                                  //               )));
-                                  //   if (refresh == 'refresh') {
-                                  //     loadData();
-                                  //   }
-                                  //},
-
-                                  child: Dismissible(
-                                    key: UniqueKey(),
-                                    onDismissed: (DismissDirection
-                                        dismissDirection) async {
-                                      await phonebookRepository
-                                          .deleteContact(phoneList.id);
-                                      loadData();
+        child: Visibility(
+          visible: phonebook.isNotEmpty,
+          replacement: const Center(child: Text('No Contacts')),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: phonebook.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          itemCount: phonebook.length,
+                          itemBuilder: (context, index) {
+                            var phoneList = phonebook[index];
+                            return Dismissible(
+                              key: UniqueKey(),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 140,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => EditPage(
+                                                    id: phoneList.id,
+                                                    name: phoneList.name,
+                                                    phoneNumber:
+                                                        phoneList.phoneNumber,
+                                                    email: phoneList.email,
+                                                  )));
                                     },
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16)),
-                                      elevation: 8,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 16),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              'Name: ${phoneList.name}',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            Text(
-                                                'Phone Number: ${phoneList.phoneNumber}'),
-                                            Text('E-mail: ${phoneList.email}'),
-                                          ],
+
+                                    // onTap: () async {
+                                    //   String refresh = await Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //           builder: (context) => EditPage(
+                                    //                 id: phoneList.id,
+                                    //                 name: phoneList.name,
+                                    //                 phoneNumber:
+                                    //                     phoneList.phoneNumber,
+                                    //                 email: phoneList.email,
+                                    //               )));
+                                    //   if (refresh == 'refresh') {
+                                    //     loadData();
+                                    //   }
+                                    //},
+
+                                    child: Dismissible(
+                                      key: UniqueKey(),
+                                      onDismissed: (DismissDirection
+                                          dismissDirection) async {
+                                        await phonebookRepository
+                                            .deleteContact(phoneList.id);
+                                        loadData();
+                                      },
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
+                                        elevation: 8,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 16),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text(
+                                                'Name: ${phoneList.name}',
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              Text(
+                                                  'Phone Number: ${phoneList.phoneNumber}'),
+                                              Text(
+                                                  'E-mail: ${phoneList.email}'),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-              ),
-            ],
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
