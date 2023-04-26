@@ -53,7 +53,11 @@ class _MainPageState extends State<MainPage> {
         },
         child: Visibility(
           visible: phonebook.isNotEmpty,
-          replacement: const Center(child: Text('No Contacts')),
+          replacement: const Center(
+              child: Text(
+            'No Contacts',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+          )),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
